@@ -1,5 +1,5 @@
 Flask~=2.3.2
-Markdown~=3.4.3
+marko[codehilite]~=1.3.0
 python-dotenv~=1.0.0
 Requests~=2.31.0
 Werkzeug~=2.3.4
