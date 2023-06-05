@@ -32,13 +32,18 @@ parser.add_argument('--port', type=int, default=5000, help='Port number to run t
 args = parser.parse_args()
 
 # Load issues from CSV
+issues = []
 with open(args.csvfile, 'r') as f:
     reader = csv.DictReader(f)
-    issues = list(reader)
+    for row in reader:
+        # Format the dates in a more human-readable way
+        row['Created At'] = datetime.strptime(row['Created At'], '%Y-%m-%dT%H:%M:%SZ').strftime('%b %d, %Y %H:%M:%S')
+        row['Updated At'] = datetime.strptime(row['Updated At'], '%Y-%m-%dT%H:%M:%SZ').strftime('%b %d, %Y %H:%M:%S')
+        issues.append(row)
 
 SORTED_ISSUES = {
-    'created_at': sorted(issues, key=lambda x: datetime.strptime(x['Created At'], '%Y-%m-%dT%H:%M:%SZ'), reverse=True),
-    'updated_at': sorted(issues, key=lambda x: datetime.strptime(x['Updated At'], '%Y-%m-%dT%H:%M:%SZ'), reverse=True),
+    'created_at': sorted(issues, key=lambda x: datetime.strptime(x['Created At'], '%b %d, %Y %H:%M:%S'), reverse=True),
+    'updated_at': sorted(issues, key=lambda x: datetime.strptime(x['Updated At'], '%b %d, %Y %H:%M:%S'), reverse=True),
     'total_reactions': sorted(issues, key=lambda x: int(x['Total Reactions']), reverse=True),
     'repo_name': sorted(issues, key=lambda x: x['Repository']),
 }
@@ -114,6 +119,7 @@ def homepage():
             <th>Repository</th>
             <th>Issue Title</th>
             <th>Created At</th>
+            <th>Updated At</th>
             <th>Total Reactions</th>
           </tr>
         </thead>
@@ -123,6 +129,7 @@ def homepage():
               <td>{{ issue['Repository'] }}</td>
               <td><a href="/{{ loop.index }}?sort={{ sort }}">{{ issue['Issue Title'] }}</a></td>
               <td>{{ issue['Created At'] }}</td>
+              <td>{{ issue['Updated At'] }}</td>
               <td>{{ issue['Total Reactions'] }}</td>
             </tr>
           {% endfor %}
@@ -206,6 +213,7 @@ def get_issue(issue_num):
       <h1><a href="{{ issue['Issue URL'] }}">{{ issue['Issue Title'] }}</a></h1>
       <p><strong>Repository:</strong> {{ issue['Repository'] }}</p>
       <p><strong>Created at:</strong> {{ issue['Created At'] }}</p>
+      <p><strong>Updated at:</strong> {{ issue['Updated At'] }}</p>
       <p><strong>Total reactions:</strong> {{ issue['Total Reactions'] }}</p>
       <div class="labels">
         {% for label in issue['Labels'].split(', ') %}
@@ -222,3 +230,4 @@ def get_issue(issue_num):
 
 if __name__ == '__main__':
     app.run(port=args.port)
+
