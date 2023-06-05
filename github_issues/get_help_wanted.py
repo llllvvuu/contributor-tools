@@ -21,12 +21,15 @@ while True:
     except OverflowError:
         maxInt = int(maxInt/10)
 
-GOOD_FIRST_ISSUE_LABELS = [
+GOOD_FIRST_ISSUE_LABELS = list(map(lambda x: x.lower(), [
     "good first issue", 
     "good-first-issue", 
     "first-timers-only", 
     "beginner-friendly",
     "starter issue",
+    "documentation"
+    "easy bug fix",
+    "low-hanging-fruit",
     "easy",
     "beginner",
     "first timer",
@@ -36,15 +39,14 @@ GOOD_FIRST_ISSUE_LABELS = [
     "beginners-only",
     "beginner issue",
     "newbie",
-    "help wanted",
     "E-easy",
     "difficulty: easy",
     "starter bug",
     "good for beginner",
     "good 4 newbie"
-]
+]))
 
-ACCEPTING_PRS_LABELS = [
+ACCEPTING_PRS_LABELS = list(map(lambda x: x.lower(), [
     "accepting prs", 
     "pr welcome", 
     "pr-welcome", 
@@ -65,10 +67,11 @@ ACCEPTING_PRS_LABELS = [
     "open for pull requests",
     "pr open",
     "prs open",
-    "pulls welcome"
-]
+    "pulls welcome",
+    "good second issue",
+]))
 
-NOT_OPEN_LABELS = [
+NOT_OPEN_LABELS = list(map(lambda x: x.lower(), [
     "wontfix", 
     "invalid", 
     "duplicate", 
@@ -100,17 +103,29 @@ NOT_OPEN_LABELS = [
     "needs-discussion",
     "awaiting-feedback",
     "more-information-needed"
-]
+]))
 
 
 def issue_filter(issue: Dict[str, str], good_first_issues: bool, accepting_prs: bool) -> bool:
-    labels = issue['Labels'].split(", ")
+    labels = issue['Labels'].lower().split(", ")
+    labels += list(map(lambda x: x.replace(" ", "-"), labels))
+    labels += list(map(lambda x: x.replace("-", " "), labels))
     # Always filter out NOT_OPEN_LABELS
     if any(label in NOT_OPEN_LABELS for label in labels):
         return False
-    if good_first_issues and not any(label in GOOD_FIRST_ISSUE_LABELS for label in labels):
+    if any("waiting" in label or "blocked" in label or "linear" in label or "discuss" in label for label in labels):
         return False
-    if accepting_prs and not any(label in ACCEPTING_PRS_LABELS for label in labels):
+    if (good_first_issues or accepting_prs) and any("easy" in label or "beginner" in label for label in labels):
+        return True
+    if (good_first_issues or accepting_prs) and any(label in GOOD_FIRST_ISSUE_LABELS for label in labels):
+        return True
+    if good_first_issues:
+        return False
+    if accepting_prs and any("help" in label or "accepting" in label or "contrib" in label for label in labels):
+        return True
+    if accepting_prs and any(label in ACCEPTING_PRS_LABELS for label in labels):
+        return True
+    if accepting_prs:
         return False
     return True
 
