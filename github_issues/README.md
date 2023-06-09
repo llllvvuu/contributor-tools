@@ -40,7 +40,10 @@ The `contributor-tools/github_issues` directory contains the following scripts:
 
 2. `get_help_wanted.py`: This script filters the GitHub issues CSV file and includes only the issues that are open to contributors. You can filter by good first issues or issues accepting pull requests. Usage: `python get_help_wanted.py <input.csv> --output <output.csv> [--good-first-issue] [--accepting-prs]`
 
-3. `serve_github_issues.py`: This script serves the filtered GitHub issues as a web application. You can view the issues in a browser, navigate between them, and sort them based on different criteria. Usage: `python serve_github_issues.py <input.csv> --port <port>`
+3. `merge_issue_csvs.py`: This script merges multiple GitHub issues CSV files and deduplicates them based on the 'Issue URL'. The script is useful when you have issue data from multiple CSV files that you want to combine into a single file. Usage: `python merge.py a.csv b.csv c.csv -o d.csv`.
+
+4. `serve_github_issues.py`: This script serves the filtered GitHub issues as a web application. You can view the issues in a browser, navigate between them, and sort them based on different criteria. Usage: `python serve_github_issues.py <input.csv> --port <port>`
+
 
 Please refer to the individual script docstrings for more detailed usage instructions.
 
