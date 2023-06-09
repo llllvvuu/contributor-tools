@@ -86,6 +86,7 @@ def get_issues(repo_full_name: str, max_issues: int, days: int) -> List[dict]:
                     "Created At": issue["created_at"],
                     "Updated At": issue["updated_at"],
                     "Labels": ", ".join(label["name"] for label in issue["labels"]),
+                    "Comments": issue["comments"],
                     "Total Reactions": issue["reactions"]["total_count"],
                 }
             )
@@ -133,6 +134,7 @@ def main():
                     "Created At",
                     "Updated At",
                     "Labels",
+                    "Comments",
                     "Total Reactions",
                 ],
             )

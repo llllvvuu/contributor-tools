@@ -66,6 +66,7 @@ SORTED_ISSUES = {
         issues, key=lambda x: int(x["Total Reactions"]), reverse=True
     ),
     "repo_name": sorted(issues, key=lambda x: x["Repository"]),
+    "comments": sorted(issues, key=lambda x: int(x["Comments"]), reverse=True),
 }
 
 # Initialize Flask app
@@ -174,11 +175,21 @@ def homepage():
         <a href="/?sort=created_at">Created At</a>
         <a href="/?sort=updated_at">Updated At</a>
         <a href="/?sort=total_reactions">Total Reactions</a>
+        <a href="/?sort=comments">Comments</a>
       </div>
       <div class="container">
         {% for issue in issues %}
           <div class="card">
-            <h2><a href="/{{ loop.index }}?sort={{ sort }}">{{ issue['Issue Title'] }}</a></h2>
+            <h2>
+              <a href="/{{ loop.index }}?sort={{ sort }}">
+                {{ issue['Issue Title'] }}
+              </a>
+            </h2>
+            <p>
+              <a href="{{ issue['Issue URL'] }}" target="_blank" rel="noopener noreferrer">
+                <strong>Comments:</strong> {{ issue['Comments'] }}
+              </a>
+            </p>
             <p><strong>Repository:</strong> {{ issue['Repository'] }}</p>
             <p><strong>Created at:</strong> {{ issue['Created At'] }}</p>
             <p><strong>Updated at:</strong> {{ issue['Updated At'] }}</p>
@@ -395,6 +406,11 @@ def get_issue(issue_num):
       <div class="container">
         <h1><a href="{{ issue['Issue URL'] }}" target="_blank" rel="noopener noreferrer">{{ issue['Issue Title'] }}</a></h1>
         <div class="metadata">
+          <p>
+            <a href="{{ issue['Issue URL'] }}" target="_blank" rel="noopener noreferrer">
+              <strong>Comments:</strong> {{ issue['Comments'] }}
+            </a>
+          </p>
           <p><strong>Repository:</strong> {{ issue['Repository'] }}</p>
           <p><strong>Created at:</strong> {{ issue['Created At'] }}</p>
           <p><strong>Updated at:</strong> {{ issue['Updated At'] }}</p>
