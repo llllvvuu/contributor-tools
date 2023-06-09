@@ -17,7 +17,7 @@ from marko.ext.gfm import GFM
 from flask import Flask, request, render_template_string, Markup
 from werkzeug.exceptions import NotFound
 
-markdown = Markdown(extensions=['codehilite'])
+markdown = Markdown(extensions=["codehilite"])
 markdown.use(GFM)
 
 # Increase CSV field size limit
@@ -27,38 +27,56 @@ while True:
         csv.field_size_limit(maxInt)
         break
     except OverflowError:
-        maxInt = int(maxInt/10)
+        maxInt = int(maxInt / 10)
 
 # Read arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('csvfile', type=str, help='Input CSV file')
-parser.add_argument('--port', type=int, default=5000, help='Port number to run the server on')
+parser.add_argument("csvfile", type=str, help="Input CSV file")
+parser.add_argument(
+    "--port", type=int, default=5000, help="Port number to run the server on"
+)
 args = parser.parse_args()
 
 # Load issues from CSV
 issues = []
-with open(args.csvfile, 'r') as f:
+with open(args.csvfile, "r") as f:
     reader = csv.DictReader(f)
     for row in reader:
         # Format the dates in a more human-readable way
-        row['Created At'] = datetime.strptime(row['Created At'], '%Y-%m-%dT%H:%M:%SZ').strftime('%b %d, %Y %H:%M:%S')
-        row['Updated At'] = datetime.strptime(row['Updated At'], '%Y-%m-%dT%H:%M:%SZ').strftime('%b %d, %Y %H:%M:%S')
+        row["Created At"] = datetime.strptime(
+            row["Created At"], "%Y-%m-%dT%H:%M:%SZ"
+        ).strftime("%b %d, %Y %H:%M:%S")
+        row["Updated At"] = datetime.strptime(
+            row["Updated At"], "%Y-%m-%dT%H:%M:%SZ"
+        ).strftime("%b %d, %Y %H:%M:%S")
         issues.append(row)
 
 SORTED_ISSUES = {
-    'created_at': sorted(issues, key=lambda x: datetime.strptime(x['Created At'], '%b %d, %Y %H:%M:%S'), reverse=True),
-    'updated_at': sorted(issues, key=lambda x: datetime.strptime(x['Updated At'], '%b %d, %Y %H:%M:%S'), reverse=True),
-    'total_reactions': sorted(issues, key=lambda x: int(x['Total Reactions']), reverse=True),
-    'repo_name': sorted(issues, key=lambda x: x['Repository']),
+    "created_at": sorted(
+        issues,
+        key=lambda x: datetime.strptime(x["Created At"], "%b %d, %Y %H:%M:%S"),
+        reverse=True,
+    ),
+    "updated_at": sorted(
+        issues,
+        key=lambda x: datetime.strptime(x["Updated At"], "%b %d, %Y %H:%M:%S"),
+        reverse=True,
+    ),
+    "total_reactions": sorted(
+        issues, key=lambda x: int(x["Total Reactions"]), reverse=True
+    ),
+    "repo_name": sorted(issues, key=lambda x: x["Repository"]),
 }
 
 # Initialize Flask app
 app = Flask(__name__)
 
-@app.route('/')
+
+@app.route("/")
 def homepage():
-    sort = request.args.get('sort', default='created_at', type=str)
-    return render_template_string("""
+    sort = request.args.get("sort", default="created_at", type=str)
+    return render_template_string(
+        """
     <!doctype html>
     <html>
     <head>
@@ -180,22 +198,28 @@ def homepage():
       </div>
     </body>
     </html>
-    """, issues=SORTED_ISSUES[sort], sort=sort)
+    """,
+        issues=SORTED_ISSUES[sort],
+        sort=sort,
+    )
 
 
-@app.route('/<int:issue_num>')
+@app.route("/<int:issue_num>")
 def get_issue(issue_num):
-    sort = request.args.get('sort', default='created_at', type=str)
+    sort = request.args.get("sort", default="created_at", type=str)
     try:
-        issue = SORTED_ISSUES[sort][issue_num - 1]  # Subtract 1 because indexing starts from 0
+        issue = SORTED_ISSUES[sort][
+            issue_num - 1
+        ]  # Subtract 1 because indexing starts from 0
     except IndexError:
         raise NotFound("Issue not found")
 
     # Convert Markdown to HTML
-    issue_body_html = Markup(markdown(issue['Issue Body']))
+    issue_body_html = Markup(markdown(issue["Issue Body"]))
 
     # Render issue details
-    return render_template_string("""
+    return render_template_string(
+        """
     <!doctype html>
     <html>
     <head>
@@ -387,11 +411,17 @@ def get_issue(issue_num):
       </div>
     </body>
     </html>
-    """, issue=issue, issue_num=issue_num, issue_body_html=issue_body_html,
-    num_issues=len(SORTED_ISSUES[sort]), sort=sort,
-    prev_issue_num=max(1, issue_num-1), random_issue_num=random.randint(1, len(SORTED_ISSUES[sort])),
-    next_issue_num=min(issue_num+1, len(SORTED_ISSUES[sort])))
+    """,
+        issue=issue,
+        issue_num=issue_num,
+        issue_body_html=issue_body_html,
+        num_issues=len(SORTED_ISSUES[sort]),
+        sort=sort,
+        prev_issue_num=max(1, issue_num - 1),
+        random_issue_num=random.randint(1, len(SORTED_ISSUES[sort])),
+        next_issue_num=min(issue_num + 1, len(SORTED_ISSUES[sort])),
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(port=args.port)
