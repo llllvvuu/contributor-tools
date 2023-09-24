@@ -169,9 +169,13 @@ def main():
     parser.add_argument(
         "--accepting-prs", action="store_true", help="Include only issues accepting PRs"
     )
+    parser.add_argument(
+        "--encoding", type=str, default = "utf8", help="The encoding of the CSV file"
+    )
     args = parser.parse_args()
 
-    with open(args.input, "r") as f_in, open(args.output, "w", newline="") as f_out:
+    with (open(args.input, "r", encoding = args.encoding) as f_in, 
+          open(args.output, "w", newline="", encoding = args.encoding) as f_out):
         reader = csv.DictReader(f_in)
         writer = csv.DictWriter(f_out, fieldnames=reader.fieldnames)
         writer.writeheader()

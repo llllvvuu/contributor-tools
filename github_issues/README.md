@@ -23,14 +23,22 @@ To use these tools, you need to have the following software installed:
 To get started, follow these steps:
 
 1. Clone this repository to your local machine.
-2. Change to the `contributor-tools/github_issues` directory.
-3. Create a `.env` file in the root of the project directory (`contributor-tools/github_issues`) and add the following line to it:
-```
-API_TOKEN=your-github-api-token
-```
-Replace `your-github-api-token` with your actual GitHub API token (Settings > Developer settings > Personal access tokens).
-
+2. Change to the `contributor-tools` directory.
+3. Create and activate a virtual environment, e.g.:
+ - `python -m venv ../venvs/contributor-tools`
+ - `source ../venvs/contributor-tools/bin/activate` (Posix) `.\venvs\contributor-tools\Scripts\activate` (Windows)
 4. Install the required Python packages by running: `pip install -r requirements.txt`
+5. Change to the `github_issues` directory.
+6. Create  a [fine-grained GitHub Personal Access Token](https://github.com/settings/tokens?type=beta) (PAT)
+ - Generate new token
+ - Confirm access 
+ - Check All repositories (or up to 50 selected repositories)
+ - Permissions -> Repository permissions -> Issues -> Access: Read-only
+ - Permissions -> Account permissions -> Starring -> Access: Read-only
+ - Generate token.
+ - Copy its value.
+7. Create a `.env` file in the root of the project directory (`contributor-tools/github_issues`) containing this PAT:
+ - `echo API_TOKEN=your-github-PAT > .env` where your-github-PAT is the token created in the previous step.
 
 ## Scripts
 

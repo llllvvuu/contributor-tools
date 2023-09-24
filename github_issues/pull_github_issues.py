@@ -109,6 +109,9 @@ def main():
         "--days", type=int, default=7, help="Look at issues from the last X days"
     )
     parser.add_argument("--output", type=str, required=True, help="Output CSV file")
+    parser.add_argument(
+        "--encoding", type=str, default = "utf8", help="The encoding of the CSV file"
+    )
     args = parser.parse_args()
 
     repos = get_starred_repos()
@@ -123,7 +126,7 @@ def main():
             continue
 
         # Write issues to CSV file after each repo
-        with open(args.output, "w", newline="") as f:
+        with open(args.output, "w", newline="", encoding = args.encoding) as f:
             writer = csv.DictWriter(
                 f,
                 fieldnames=[
