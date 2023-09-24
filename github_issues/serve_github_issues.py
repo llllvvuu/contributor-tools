@@ -35,11 +35,15 @@ parser.add_argument("csvfile", type=str, help="Input CSV file")
 parser.add_argument(
     "--port", type=int, default=5000, help="Port number to run the server on"
 )
+
+parser.add_argument(
+    "--encoding", type=str, default = "utf8", help="The encoding of the CSV file"
+)
 args = parser.parse_args()
 
 # Load issues from CSV
 issues = []
-with open(args.csvfile, "r") as f:
+with open(args.csvfile, "r", encoding = args.encoding) as f:
     reader = csv.DictReader(f)
     for row in reader:
         # Format the dates in a more human-readable way

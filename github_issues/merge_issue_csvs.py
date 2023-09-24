@@ -19,17 +19,21 @@ parser.add_argument(
 )
 parser.add_argument("-o", "--output", required=True, help="Output csv file.")
 
+parser.add_argument(
+    "--encoding", type=str, default = "utf8", help="The encoding of the CSV file"
+)
+
 args = parser.parse_args()
 
 
 def read_csv(filename):
-    with open(filename, "r") as file:
+    with open(filename, "r", encoding=args.encoding) as file:
         return [row for row in csv.DictReader(file)]
 
 
 def write_csv(data, filename):
     if data:
-        with open(filename, "w") as file:
+        with open(filename, "w", encoding = args.encoding) as file:
             writer = csv.DictWriter(file, fieldnames=data[0].keys())
             writer.writeheader()
             writer.writerows(data)
