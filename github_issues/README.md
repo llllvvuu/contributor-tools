@@ -28,7 +28,13 @@ To get started, follow these steps:
 ```
 API_TOKEN=your-github-api-token
 ```
-Replace `your-github-api-token` with your actual GitHub API token (Settings > Developer settings > Personal access tokens).
+Replace `your-github-api-token` with a [fine-grained GitHub Personal Access Token](https://github.com/settings/tokens?type=beta) 
+ - Generate new token
+ - Confirm access 
+ - Check All repositories (or up to 50 selected repositories)
+ - Permissions -> Repository permissions -> Issues -> Access: Read-only
+ - Permissions -> Account permissions -> Starring -> Access: Read-only
+ - Generate token.
 
 4. Install the required Python packages by running: `pip install -r requirements.txt`
 
