@@ -1,3 +1,4 @@
 github_issues/data/
 .env
 *.csv
+venvs
