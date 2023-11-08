@@ -1,3 +1,14 @@
+"""
+Makes repositories starred on `API_TOKEN` get watched on `BURNER_API_TOKEN`.
+
+Author: GPT-4
+
+Usage:
+  python watch_on_burner.py
+"""
+
+__author__ = "GPT-4"
+
 import os
 import requests
 from typing import List, Optional

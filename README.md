@@ -1,7 +1,6 @@
-# Contributor Tools for GitHub and StackOverflow
+# Contributor Tools for GitHub
 
-The eventual goal here is to play around with making recommendation algos. I'll do this when I'm less busy.
-
-The first step was to set up the raw feed. There's no `stackoverflow` directory for now, since StackOverflow already has a pretty good digest of your followed tags and you can even have it e-mail you every day. But for some reason, GitHub doesn't have anything similar for stars, so we fix that.
-
-If/when I get to the recommendation algo part, I'll do it for both SO and GitHub.
+Functionality:
+- Pull issues of starred repositories as CSV.
+- Serve a basic web frontend for this CSV.
+- Make stars from one account get watched on another account (e.g. set up a burner e-mail to look at firehose of notifications)

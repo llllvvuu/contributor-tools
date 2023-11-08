@@ -1,4 +1,4 @@
-Almost everything here, including this README, was written by GPT-3.5 and GPT-4.
+>⚠️  Disclaimer: Almost everything here, including this README, was written by GPT-3.5 and GPT-4.
 
 # GitHub Issues Contributor Tools
 
@@ -9,7 +9,6 @@ This repository contains a set of tools to help you explore and filter open GitH
 - [Prerequisites](#prerequisites)
 - [Usage](#usage)
 - [Scripts](#scripts)
-- [Roadmap](#roadmap)
 
 ## Prerequisites
 
@@ -39,6 +38,7 @@ To get started, follow these steps:
  - Copy its value.
 7. Create a `.env` file in the root of the project directory (`contributor-tools/github_issues`) containing this PAT:
  - `echo API_TOKEN=your-github-PAT > .env` where your-github-PAT is the token created in the previous step.
+8. Optional: Repeat steps 6 and 7 for `BURNER_API_TOKEN` if you want to use `watch_on_burner.py`.
 
 ## Scripts
 
@@ -52,10 +52,7 @@ The `contributor-tools/github_issues` directory contains the following scripts:
 
 4. `serve_github_issues.py`: This script serves the filtered GitHub issues as a web application. You can view the issues in a browser, navigate between them, and sort them based on different criteria. Usage: `python serve_github_issues.py <input.csv> --port <port>`
 
+5. `watch_on_burner.py`. Makes repositories starred on `API_TOKEN` get watched on `BURNER_API_TOKEN`. `python watch_on_burner.py`
+
 
 Please refer to the individual script docstrings for more detailed usage instructions.
-
-## Roadmap
-We will see if GPT-4 can (ML-generated ML!):
-* Use textual analysis to classify issues (first issues / accepting pr / blocked) without explicit tags
-* Add a Tinder swipe -like feedback mechanism which improves recommendations over time
